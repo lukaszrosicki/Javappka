@@ -8,38 +8,78 @@
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-<div class="container py-4">
-    <div class="mb-3 text-end">
-        <a th:href="@{/account}" class="btn btn-secondary">Konto</a>
-    </div>
-    <div class="card mb-4">
-        <div class="card-body">
-            <h1 class="card-title">Dashboard</h1>
-            <nav>
-                <a th:href="@{/expenses}" class="me-2">Wydatki</a>
-                <a th:href="@{/incomes}" class="me-2">Dochody</a>
-                <a th:href="@{/logowanie}">Logowanie</a>
-            </nav>
+<div class="d-flex">
+    <nav class="flex-column flex-shrink-0 p-3 bg-light" style="width:200px;">
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item"><a th:href="@{/dashboard}" class="nav-link active">Dashboard</a></li>
+            <li><a th:href="@{/expenses}" class="nav-link">Wydatki</a></li>
+            <li><a th:href="@{/incomes}" class="nav-link">Dochody</a></li>
+            <li><a th:href="@{/account}" class="nav-link">Konto</a></li>
+        </ul>
+    </nav>
+<div class="container-fluid py-4">
+    <h1 class="mb-4">Dashboard</h1>
+    <form th:action="@{/dashboard}" method="get" class="row g-2 mb-3 align-items-end">
+        <div class="col-auto">
+            <select class="form-select" name="year" th:field="*{year}">
+                <option th:each="y : ${years}" th:value="${y}" th:text="${y}" th:selected="${y}==${year}"></option>
+            </select>
         </div>
+        <div class="col-auto">
+            <select class="form-select" name="month">
+                <option th:each="m : ${months}" th:value="${m}" th:text="${m}" th:selected="${m}==${month}"></option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-primary" type="submit">Pokaż</button>
+        </div>
+    </form>
+    <div class="mb-3" th:if="${incomeSum != null}">
+        Dochody: <span th:text="${incomeSum}"></span> | Wydatki: <span th:text="${expenseSum}"></span><br/>
+        Narastająco dochody: <span th:text="${incomeCum}"></span> | Narastająco wydatki: <span th:text="${expenseCum}"></span>
     </div>
 
-    <div class="card">
-        <div class="card-body">
-            <h3 class="card-title">Podsumowanie</h3>
-            <form th:action="@{/dashboard}" method="get" class="row g-2 align-items-end">
-                <div class="col-auto">
-                    <input type="number" class="form-control" name="year" th:value="${year}" placeholder="Rok" required>
-                </div>
-                <div class="col-auto">
-                    <input type="number" class="form-control" name="month" th:value="${month}" placeholder="Miesiąc" required>
-                </div>
-                <div class="col-auto">
-                    <button class="btn btn-primary" type="submit">Pokaż</button>
-                </div>
-            </form>
-            <p th:if="${incomeSum != null}" class="mt-3">Dochody: <span th:text="${incomeSum}"></span> Wydatki: <span th:text="${expenseSum}"></span></p>
+    <table class="table mb-4">
+        <thead>
+        <tr><th>ID</th><th>Typ</th><th>Kategoria</th><th>Data</th><th>Kwota</th><th>Komentarz</th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="t : ${transactions}">
+            <td th:text="${t.id}"></td>
+            <td th:text="${t.type}"></td>
+            <td th:text="${t.category}"></td>
+            <td th:text="${t.date}"></td>
+            <td th:text="${t.amount}"></td>
+            <td th:text="${t.notes}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="row">
+        <div class="col-md-6">
+            <canvas id="byCategory"></canvas>
+        </div>
+        <div class="col-md-6">
+            <canvas id="yearChart"></canvas>
         </div>
     </div>
+    </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var catLabels = [[${catLabels}]];
+    var catData = [[${catData}]];
+    if(document.getElementById('byCategory')){
+        new Chart(document.getElementById('byCategory'),{type:'bar',data:{labels:catLabels,datasets:[{label:'Wydatki',data:catData,backgroundColor:'rgba(255,99,132,0.5)'}]}});
+    }
+    var monthLabels = [[${monthLabels}]];
+    var expData = [[${expYearData}]];
+    var incData = [[${incYearData}]];
+    if(document.getElementById('yearChart')){
+        new Chart(document.getElementById('yearChart'),{type:'bar',data:{labels:monthLabels,datasets:[{label:'Wydatki',data:expData,backgroundColor:'rgba(255,99,132,0.5)'},{label:'Dochody',data:incData,backgroundColor:'rgba(75,192,192,0.5)'}]}});
+    }
+    /*]]>*/
+</script>
 </body>
 </html>
