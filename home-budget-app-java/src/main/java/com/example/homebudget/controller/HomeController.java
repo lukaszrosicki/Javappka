@@ -11,7 +11,7 @@ public class HomeController {
         return "forward:/index.html";
     }
 
-    @GetMapping("/login")
+    @GetMapping("/logowanie")
     public String login() {
         return "forward:/login.html";
     }
@@ -34,5 +34,10 @@ public class HomeController {
     @GetMapping("/account")
     public String account() {
         return "forward:/account.html";
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard() {
+        return "forward:/dashboard.html";
     }
 }

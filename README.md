@@ -15,8 +15,11 @@ The resulting JAR will be in `target/homebudgetapp-0.0.1-SNAPSHOT.jar` and can b
 java -jar target/homebudgetapp-0.0.1-SNAPSHOT.jar
 ```
 
-After starting the application you can open `http://localhost:8080/login` in a browser to see the login page.
-The main dashboard is available at `http://localhost:8080/`.
+The application uses an embedded H2 database stored in `homebudgetdb`.
+
+After starting the application you can open `http://localhost:8080/logowanie` in a browser to see the login page.
+The landing page is available at `http://localhost:8080/`.
+Authenticated users can access the dashboard at `http://localhost:8080/dashboard`.
 Additional pages:
 * `/register` – create a user account
 * `/account` – manage the account

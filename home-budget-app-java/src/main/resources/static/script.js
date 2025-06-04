@@ -5,15 +5,6 @@ function on(id, type, handler) {
     if (el) el.addEventListener(type, handler);
 }
 
-// logowanie (tylko walidacja pól)
-on('loginForm', 'submit', (e) => {
-    e.preventDefault();
-    const u = document.getElementById('username').value.trim();
-    const p = document.getElementById('password').value.trim();
-    const msg = document.getElementById('error-message');
-    msg.style.display = (u === '' || p === '') ? 'block' : 'none';
-    if (u && p) alert('Logowanie poprawne!');
-});
 
 // rejestracja
 on('registerForm', 'submit', (e) => {

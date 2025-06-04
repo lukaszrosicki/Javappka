@@ -12,12 +12,11 @@
     <div class="container py-5">
         <div class="card mx-auto" style="max-width: 400px;">
             <div class="card-body">
-                <form id="loginForm">
+                <form method="post" action="/logowanie">
                     <h2 class="card-title text-center mb-3">Logowanie</h2>
-                    <input class="form-control mb-2" type="text" id="username" name="username" placeholder="Email" required>
-                    <input class="form-control mb-2" type="password" id="password" name="password" placeholder="Hasło" required>
+                    <input class="form-control mb-2" type="text" name="username" placeholder="Email" required>
+                    <input class="form-control mb-2" type="password" name="password" placeholder="Hasło" required>
                     <button class="btn btn-primary w-100" type="submit">Zaloguj się</button>
-                    <p id="error-message" class="text-danger mt-2" style="display:none;">Wypełnij wszystkie pola!</p>
                 </form>
                 <div class="text-center mt-3">
                     <a href="/register">Załóż konto</a>
