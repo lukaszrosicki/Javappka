@@ -14,3 +14,5 @@ The resulting JAR will be in `target/homebudgetapp-0.0.1-SNAPSHOT.jar` and can b
 ```bash
 java -jar target/homebudgetapp-0.0.1-SNAPSHOT.jar
 ```
+
+After starting the application you can open `http://localhost:8080` in a browser to see the login page.
