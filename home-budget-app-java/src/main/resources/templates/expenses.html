@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wydatki</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="container py-4">
+    <div class="card mb-3">
+        <div class="card-body">
+            <h3 class="card-title">Dodaj wydatek</h3>
+            <form th:action="@{/expenses}" method="post" class="row g-2" th:object="${expense}">
+                <div class="col-md-3">
+                    <select class="form-select" th:field="*{category}" required>
+                        <option th:each="c : ${T(com.example.homebudget.model.ExpenseCategory).values()}" th:value="${c}" th:text="${c}"></option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input type="number" step="0.01" th:field="*{amount}" class="form-control" placeholder="Kwota" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="date" th:field="*{date}" class="form-control" required>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary w-100" type="submit">Dodaj</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">Lista wydatków</h3>
+            <ul class="list-group">
+                <li class="list-group-item" th:each="e : ${expenses}" th:text="${e.date} + ' - ' + e.category + ' - ' + e.amount"></li>
+            </ul>
+        </div>
+    </div>
+
+    <nav class="mt-3">
+        <a th:href="@{/dashboard}" class="me-2">Dashboard</a>
+        <a th:href="@{/incomes}" class="me-2">Dochody</a>
+        <a th:href="@{/logowanie}">Logowanie</a>
+    </nav>
+</div>
+</body>
+</html>

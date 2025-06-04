@@ -20,7 +20,7 @@ The application uses an embedded H2 database stored in `homebudgetdb`.
 After starting the application you can open `http://localhost:8080/logowanie` in a browser to see the login page.
 The landing page is available at `http://localhost:8080/`.
 Authenticated users can access the dashboard at `http://localhost:8080/dashboard`.
-Additional pages:
+All pages now use Thymeleaf templates connected to Spring controllers:
 * `/register` – create a user account
 * `/account` – manage the account
 * `/expenses` – manage and view expenses

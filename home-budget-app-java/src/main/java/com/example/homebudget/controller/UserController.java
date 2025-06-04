@@ -2,13 +2,16 @@ package com.example.homebudget.controller;
 
 import com.example.homebudget.model.ApplicationUser;
 import com.example.homebudget.repository.ApplicationUserRepository;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
+import java.security.Principal;
 
-@RestController
-@RequestMapping("/api/users")
+@Controller
 public class UserController {
     private final ApplicationUserRepository repository;
 
@@ -16,27 +19,34 @@ public class UserController {
         this.repository = repository;
     }
 
-    @GetMapping
-    public List<ApplicationUser> list() {
-        return repository.findAll();
+    @GetMapping("/register")
+    public String registerForm(Model model) {
+        model.addAttribute("user", new ApplicationUser());
+        return "register";
     }
 
-    @PostMapping
-    public ApplicationUser create(@RequestBody ApplicationUser user) {
-        return repository.save(user);
+    @PostMapping("/register")
+    public String register(@ModelAttribute ApplicationUser user) {
+        repository.save(user);
+        return "redirect:/logowanie";
     }
 
-    @PutMapping("/{id}/password")
-    public ResponseEntity<ApplicationUser> changePassword(@PathVariable Long id, @RequestBody String newPassword) {
-        return repository.findById(id)
-                .map(user -> {
-                    user.setPassword(newPassword);
-                    return ResponseEntity.ok(repository.save(user));
-                }).orElse(ResponseEntity.notFound().build());
+    @PostMapping("/account/password")
+    public String changePassword(@RequestParam String password, Principal principal) {
+        ApplicationUser u = repository.findByEmail(principal.getName());
+        if (u != null) {
+            u.setPassword(password);
+            repository.save(u);
+        }
+        return "redirect:/account";
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        repository.deleteById(id);
+    @PostMapping("/account/delete")
+    public String deleteAccount(Principal principal) {
+        ApplicationUser u = repository.findByEmail(principal.getName());
+        if (u != null) {
+            repository.delete(u);
+        }
+        return "redirect:/";
     }
 }
