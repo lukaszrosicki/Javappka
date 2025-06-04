@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/incomes")
@@ -25,6 +26,11 @@ public class IncomeController {
     @PostMapping
     public Income create(@RequestBody Income income) {
         return incomeRepository.save(income);
+    }
+
+    @GetMapping("/summary")
+    public BigDecimal summary(@RequestParam int year, @RequestParam int month) {
+        return incomeRepository.sumByMonthAndYear(year, month);
     }
 
     @GetMapping("/{id}")

@@ -25,4 +25,14 @@ public class HomeController {
     public String incomes() {
         return "forward:/incomes.html";
     }
+
+    @GetMapping("/register")
+    public String register() {
+        return "forward:/register.html";
+    }
+
+    @GetMapping("/account")
+    public String account() {
+        return "forward:/account.html";
+    }
 }
