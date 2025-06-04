@@ -399,3 +399,6 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 ajax.txt
+
+# Ignore Maven build directory
+home-budget-app-java/target/
