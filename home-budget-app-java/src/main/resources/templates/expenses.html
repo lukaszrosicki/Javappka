@@ -8,7 +8,16 @@
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-<div class="container py-4">
+<div class="d-flex">
+    <nav class="flex-column flex-shrink-0 p-3 bg-light" style="width:200px;">
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item"><a th:href="@{/dashboard}" class="nav-link">Dashboard</a></li>
+            <li><a th:href="@{/expenses}" class="nav-link active">Wydatki</a></li>
+            <li><a th:href="@{/incomes}" class="nav-link">Dochody</a></li>
+            <li><a th:href="@{/account}" class="nav-link">Konto</a></li>
+        </ul>
+    </nav>
+<div class="container-fluid py-4">
     <div class="card mb-3">
         <div class="card-body">
             <h3 class="card-title">Dodaj wydatek</h3>
@@ -34,17 +43,31 @@
     <div class="card">
         <div class="card-body">
             <h3 class="card-title">Lista wydatków</h3>
-            <ul class="list-group">
-                <li class="list-group-item" th:each="e : ${expenses}" th:text="${e.date} + ' - ' + e.category + ' - ' + e.amount"></li>
-            </ul>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th><th>Kategoria</th><th>Data</th><th>Kwota</th><th>Komentarz</th><th>Akcje</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="e : ${expenses}">
+                    <td><a th:href="@{/expenses/{id}(id=${e.id})}" th:text="${e.id}"></a></td>
+                    <td th:text="${e.category}"></td>
+                    <td th:text="${e.date}"></td>
+                    <td th:text="${e.amount}"></td>
+                    <td th:text="${e.notes}"></td>
+                    <td>
+                        <a th:href="@{/expenses/{id}(id=${e.id})}" class="btn btn-sm btn-secondary">Edytuj</a>
+                        <form th:action="@{/expenses/{id}(id=${e.id})}" method="post" class="d-inline">
+                            <input type="hidden" name="_method" value="delete"/>
+                            <button class="btn btn-sm btn-danger" type="submit">Usuń</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-
-    <nav class="mt-3">
-        <a th:href="@{/dashboard}" class="me-2">Dashboard</a>
-        <a th:href="@{/incomes}" class="me-2">Dochody</a>
-        <a th:href="@{/logowanie}">Logowanie</a>
-    </nav>
 </div>
 </body>
 </html>

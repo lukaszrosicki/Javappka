@@ -1,7 +1,7 @@
 package com.example.homebudget.controller;
 
 import com.example.homebudget.model.Income;
-import com.example.homebudget.repository.IncomeRepository;
+import com.example.homebudget.service.IncomeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,35 +14,35 @@ import java.math.BigDecimal;
 @RequestMapping("/incomes")
 public class IncomeController {
 
-    private final IncomeRepository incomeRepository;
+    private final IncomeService incomeService;
 
-    public IncomeController(IncomeRepository incomeRepository) {
-        this.incomeRepository = incomeRepository;
+    public IncomeController(IncomeService incomeService) {
+        this.incomeService = incomeService;
     }
 
     @GetMapping
     public String list(Model model) {
-        model.addAttribute("incomes", incomeRepository.findAll());
+        model.addAttribute("incomes", incomeService.findAll());
         model.addAttribute("income", new Income());
         return "incomes";
     }
 
     @PostMapping
     public String create(@ModelAttribute Income income) {
-        incomeRepository.save(income);
+        incomeService.save(income);
         return "redirect:/incomes";
     }
 
     @GetMapping("/summary")
     @ResponseBody
     public BigDecimal summary(@RequestParam int year, @RequestParam int month) {
-        return incomeRepository.sumByMonthAndYear(year, month);
+        return incomeService.sumByMonthAndYear(year, month);
     }
 
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Income> get(@PathVariable Long id) {
-        return incomeRepository.findById(id)
+        return incomeService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -50,6 +50,6 @@ public class IncomeController {
     @DeleteMapping("/{id}")
     @ResponseBody
     public void delete(@PathVariable Long id) {
-        incomeRepository.deleteById(id);
+        incomeService.delete(id);
     }
 }
