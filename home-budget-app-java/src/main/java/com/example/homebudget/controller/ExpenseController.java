@@ -2,10 +2,11 @@ package com.example.homebudget.controller;
 
 import com.example.homebudget.model.Expense;
 import com.example.homebudget.service.ExpenseService;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.math.BigDecimal;
@@ -40,16 +41,28 @@ public class ExpenseController {
     }
 
     @GetMapping("/{id}")
-    @ResponseBody
-    public ResponseEntity<Expense> get(@PathVariable Long id) {
-        return expenseService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public String edit(@PathVariable Long id, Model model) {
+        Expense expense = expenseService.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        model.addAttribute("expense", expense);
+        return "expense";
+    }
+
+    @PutMapping("/{id}")
+    public String update(@PathVariable Long id, @ModelAttribute Expense updated) {
+        Expense expense = expenseService.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        expense.setCategory(updated.getCategory());
+        expense.setDate(updated.getDate());
+        expense.setAmount(updated.getAmount());
+        expense.setNotes(updated.getNotes());
+        expenseService.save(expense);
+        return "redirect:/expenses";
     }
 
     @DeleteMapping("/{id}")
-    @ResponseBody
-    public void delete(@PathVariable Long id) {
+    public String delete(@PathVariable Long id) {
         expenseService.delete(id);
+        return "redirect:/expenses";
     }
 }
